@@ -1,2 +1,2 @@
-# BellyButtonChallenge.github.io
-homework for module 14
+# Belly-button-challenge
+building interactive dashboard
