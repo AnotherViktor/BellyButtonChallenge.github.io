@@ -1,0 +1,112 @@
+Steps to Complete the Challenge
+1. Set up your GitHub repository
+Create a new repository on GitHub and name it belly-button-challenge.
+Clone the repository to your local machine.
+Copy the starter files (index.html, samples.json, and static folder) into your local repository.
+Push the changes to GitHub.
+Deploy the repository to GitHub Pages.
+2. Use D3.js to Read the samples.json file
+You will fetch the dataset using D3, specifically from the URL provided:
+
+javascript
+Copy code
+d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then(function(data) {
+  console.log(data);
+});
+This allows you to access the data and start building your visualizations.
+
+3. Build a Horizontal Bar Chart for the Top 10 OTUs
+The chart should display the Top 10 OTUs for the selected sample:
+
+Values: Use sample_values for the bar chart values.
+Labels: Use otu_ids as labels.
+Hovertext: Use otu_labels for hovertext.
+Here’s an example for creating the bar chart using Plotly:
+
+javascript
+Copy code
+var trace = {
+  x: sample_values.slice(0, 10).reverse(),
+  y: otu_ids.slice(0, 10).map(id => `OTU ${id}`).reverse(),
+  text: otu_labels.slice(0, 10).reverse(),
+  type: "bar",
+  orientation: "h"
+};
+
+var layout = {
+  title: "Top 10 OTUs",
+  margin: { l: 100, r: 100, t: 100, b: 100 }
+};
+
+Plotly.newPlot("bar", [trace], layout);
+4. Create a Bubble Chart for Each Sample
+Build a bubble chart using the following:
+
+x-axis: otu_ids.
+y-axis: sample_values.
+Marker Size: sample_values.
+Marker Colors: otu_ids.
+Text (hovertext): otu_labels.
+Here’s a Plotly example for creating the bubble chart:
+
+javascript
+Copy code
+var trace1 = {
+  x: otu_ids,
+  y: sample_values,
+  text: otu_labels,
+  mode: 'markers',
+  marker: {
+    color: otu_ids,
+    size: sample_values
+  }
+};
+
+var layout = {
+  title: "OTU Samples",
+  xaxis: { title: "OTU ID" },
+  showlegend: false,
+  height: 600,
+  width: 1200
+};
+
+Plotly.newPlot('bubble', [trace1], layout);
+5. Display the Metadata (Demographic Information)
+To show the demographic information for the selected sample:
+
+Select the sample's metadata from the dataset.
+Loop through the metadata's key-value pairs and append them to the panel. Here’s an example to append the metadata:
+javascript
+Copy code
+function buildMetadata(sample) {
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
+    var metadata = data.metadata;
+    var result = metadata.filter(sampleObj => sampleObj.id == sample)[0];
+    var panel = d3.select("#sample-metadata");
+
+    panel.html("");
+    Object.entries(result).forEach(([key, value]) => {
+      panel.append("h6").text(`${key.toUpperCase()}: ${value}`);
+    });
+  });
+}
+6. Update Charts and Metadata When a New Sample is Selected
+Use the optionChanged function to listen for dropdown changes and update both the charts and metadata when a user selects a different sample:
+
+javascript
+Copy code
+function optionChanged(newSample) {
+  buildCharts(newSample);
+  buildMetadata(newSample);
+}
+7. Deploy Your App to GitHub Pages
+After you've completed the app:
+
+Push all changes to your GitHub repository.
+Deploy the app using GitHub Pages.
+Ensure your README.md file is detailed, including a description of the project, the files used, instructions for deployment, and examples of the visualizations.
+Final Deliverables:
+A GitHub repository with the belly-button-challenge project. Ensure frequent commits with clear messages.
+A GitHub Pages deployment of the dashboard.
+Submit links to both the repository and the deployed app.
+This guide should help you complete the challenge. If you need further clarification, feel free to ask!
